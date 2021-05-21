@@ -1,25 +1,25 @@
 FROM ubuntu:rolling
 
-RUN apt-get update && apt-get install -y wget apt-transport-https ca-certificates curl gnupg2 software-properties-common tar git openssl gzip unzip\
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y wget apt-transport-https ca-certificates curl gnupg2 software-properties-common tar git openssl gzip unzip\
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 ## Docker
-ARG DOCKER=19.03.8
+ARG DOCKER=20.10.5
 RUN curl https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER}.tgz > docker.tar.gz && tar xzvf docker.tar.gz -C /usr/local/bin/ --strip-components=1 && \
     rm docker.tar.gz && \
     docker -v
 
 ## Docker Compose
-ARG DOCKER_COMPOSE=1.25.4
+ARG DOCKER_COMPOSE=1.29.0
 RUN curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     docker-compose -v
 
 ## Node.js
-ARG NODE=12.x
+ARG NODE=14.x
 RUN curl -sL https://deb.nodesource.com/setup_${NODE} > install.sh && chmod +x install.sh && ./install.sh && \
-    apt-get install -y nodejs\
+     DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs\
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
     && rm install.sh
@@ -32,7 +32,7 @@ ENV LANG C.UTF-8
 
 ## OpenJDK
 ARG JDK_VERSION=8
-RUN apt-get update && apt-get install -y --no-install-recommends openjdk-${JDK_VERSION}-jdk \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-${JDK_VERSION}-jdk \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
