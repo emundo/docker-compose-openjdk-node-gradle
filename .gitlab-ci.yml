@@ -6,7 +6,7 @@ build-image:
   variables:
     IMAGE_NAME: emundo/${CI_PROJECT_NAME}
     IMAGE_TAG: openjdk-${JDK_VERSION}-gradle-${GRADLE_VERSION}
-    EXTRA_ARGS: '--build-arg JDK_VERSION="$JDK_VERSION" --build-arg GRADLE_VERSION="$GRADLE_VERSION"'
+    EXTRA_ARGS: '--build-arg JDK_VERSION=$JDK_VERSION --build-arg GRADLE_VERSION=$GRADLE_VERSION'
   parallel:
     matrix:
       - JDK_VERSION: 8
