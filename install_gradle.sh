@@ -1,6 +1,4 @@
-#!/bin/bash
-
-TAG="$IMAGE:${IMAGE_TAG}"
+#!/usr/bin/env bash
 
 echo 'Lade alle verfügbaren Gradle-Versionen'
 PAGE_URL='https://services.gradle.org/versions/all'
@@ -20,18 +18,10 @@ FULL_GRADLE_VERSION="$(
 			| tail -1
 	    )" || true
 echo "Benutze Gradle ${FULL_GRADLE_VERSION}"
-echo "Benutze JDK Version ${JDK_VERSION}"
 
-docker build . \
-    -t "$TAG" \
-    --build-arg JDK_VERSION=$JDK_VERSION \
-    --build-arg GRADLE_VERSION=$FULL_GRADLE_VERSION
-
-IMAGE_ID=$(docker images $TAG --format "{{.ID}}")
-
-for tag in ${EXTRA_TAGS//;/$'\n'}
-do
-    echo $tag
-    docker tag $IMAGE_ID "$IMAGE:${tag}"
-done
-
+wget https://services.gradle.org/distributions/gradle-"${FULL_GRADLE_VERSION}"-bin.zip \
+    --output-document=gradle.zip && \
+    unzip gradle.zip && \
+    rm gradle.zip && \
+    mv "gradle-${FULL_GRADLE_VERSION}" "${GRADLE_HOME}/" && \
+    ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle

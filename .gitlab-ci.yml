@@ -1,0 +1,27 @@
+include:
+  - project: templates/gitlab-ci-templates
+    file: docker-build.gitlab-ci.yml
+
+build-image:
+  variables:
+    IMAGE_NAME: emundo/${CI_PROJECT_NAME}
+    IMAGE_TAG: openjdk-${JDK_VERSION}-gradle-${GRADLE_VERSION}
+    EXTRA_ARGS: '--build-arg JDK_VERSION="$JDK_VERSION" --build-arg GRADLE_VERSION="$GRADLE_VERSION"'
+  parallel:
+    matrix:
+      - JDK_VERSION: 8
+        GRADLE_VERSION:
+          - 5
+          - 6
+          - 7
+      - JDK_VERSION: 11
+        GRADLE_VERSION:
+          - 5
+          - 6
+          - 7
+      - JDK_VERSION: 16
+        GRADLE_VERSION:
+          - 7
+      - JDK_VERSION: 17
+        GRADLE_VERSION:
+          - 7

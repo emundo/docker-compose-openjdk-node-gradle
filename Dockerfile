@@ -31,20 +31,16 @@ RUN npm install -g npm@latest
 ENV LANG C.UTF-8
 
 ## OpenJDK
-ARG JDK_VERSION=8
+ARG JDK_VERSION=11
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openjdk-${JDK_VERSION}-jdk \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 ## Gradle
-ARG GRADLE_VERSION=4.10.3
+ARG GRADLE_VERSION=7
 ENV GRADLE_HOME /opt/gradle
-RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    --output-document=gradle.zip && \
-    unzip gradle.zip && \
-    rm gradle.zip && \
-    mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" && \
-    ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle
+ADD install_gradle.sh /tmp/install_gradle.sh
+RUN /tmp/install_gradle.sh && rm /tmp/install_gradle.sh
 
 ## emundo User
 RUN addgroup --gid 1101 rancher && \
