@@ -1,6 +1,6 @@
 FROM ubuntu:rolling
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y wget apt-transport-https ca-certificates curl gnupg2 software-properties-common tar git openssl gzip unzip\
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y wget netcat-openbsd apt-transport-https ca-certificates curl gnupg2 software-properties-common tar git openssl gzip unzip\
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
